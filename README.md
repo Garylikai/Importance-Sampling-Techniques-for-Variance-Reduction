@@ -1,6 +1,6 @@
 # Importance-Sampling-Techniques-for-Variance-Reduction
 
-AMS 553: Simulation Modeling and Analysis, Fall 2023, December 13, 2022
+AMS 553: Simulation Modeling and Analysis, Fall 2023
 
 Proposal: November 14, 2022
 

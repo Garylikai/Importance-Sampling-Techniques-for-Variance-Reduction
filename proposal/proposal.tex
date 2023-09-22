@@ -1,0 +1,30 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[utf8]{inputenc}
+\usepackage[all]{xy}
+\usepackage[hyphens]{url}
+\usepackage[hidelinks]{hyperref}
+
+\usepackage{url, hyperref, amsmath, amsfonts, stmaryrd, amssymb, amsthm, mathtools, enumerate, bm, tabularx, graphicx, caption, booktabs, array, ragged2e}
+\geometry{letterpaper}
+
+\title{\textbf{AMS 553: Simulation Modeling and Analysis}\\Project Proposal}
+\author{Kai Li\\\href{mailto:kai.li@stonybrook.edu}{\texttt{kai.li@stonybrook.edu}} \and Wenbo Du\\\href{mailto:wenbo.du@stonybrook.edu}{\texttt{wenbo.du@stonybrook.edu}} \and Zhe Zhou\\\href{mailto:zhe.zhou@stonybrook.edu}{\texttt{zhe.zhou@stonybrook.edu}} \and Zeyu Dong\\\href{mailto:zeyu.dong@stonybrook.edu}{\texttt{zeyu.dong@stonybrook.edu}}}
+\date{Stony Brook University --- \today}
+
+\begin{document}
+\maketitle
+
+\section{Project Description}
+
+Importance sampling is an essential variance reduction technique in one of the Monte Carlo methods. The main idea behind importance sampling is that certain values of input random variables in a simulation are more important to the parameter being estimated than others. In some cases, it is very difficult to precisely estimate the probability of a rare event because the estimator's variance is too big. In general, in order to get a meaningful result, we increase the number of replications to reduce the variance of the estimator. Hence, a Crude Monte Carlo simulation generally requires a large number of replications. In this project, we will apply importance sampling techniques in simulation to estimate the probability of a rare event with a much smaller number of replications to achieve a higher statistical efficiency of simulation.
+
+\section{Workload Distribution}
+\begin{enumerate}
+\item Kai Li will do a thorough research on the existing importance sampling techniques.
+\item Wenbo Du will prepare a project presentation.
+\item Zhe Zhou will write a proposal and provide relevant code to implement the given method.
+\item Zeyu Dong will write a final report of the project.
+\end{enumerate}
+
+\end{document} 

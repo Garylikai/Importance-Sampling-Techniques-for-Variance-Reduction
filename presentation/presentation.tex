@@ -1,0 +1,156 @@
+\documentclass{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage{url, hyperref, amsmath, amsfonts, stmaryrd, amssymb, amsthm, mathtools, enumerate, bm, geometry, tabularx, graphicx, subcaption}
+\usefonttheme[onlymath]{serif}
+\setbeamertemplate{caption}[numbered]
+\usetheme{Boadilla}
+\usecolortheme{default}
+\DeclareMathOperator*{\argmax}{arg\,max}
+\DeclareMathOperator*{\argmin}{arg\,min}
+\newtheorem{proposition}{Proposition}
+\newcounter{saveenumi}
+\newcommand{\seti}{\setcounter{saveenumi}{\value{enumi}}}
+\newcommand{\conti}{\setcounter{enumi}{\value{saveenumi}}}
+
+\date{December 1, 2022}
+\title[Importance Sampling Techniques]{Importance Sampling Techniques for Variance Reduction\\[1ex]\normalsize AMS 553: Simulation Modeling and Analysis}
+
+\author[Kai Li, Wenbo Du , Zhe Zhou, Zeyu Dong]{Kai Li, Wenbo Du, Zhe Zhou, Zeyu Dong}
+
+\institute[]{Applied Mathematics and Statistics, Stony Brook University}
+
+\begin{document}
+
+\frame{\titlepage}
+
+\begin{frame}[fragile]
+\frametitle{Introduction}
+
+We will use the Monte Carlo method to find the average value of a function $g(x)$ over an interval $(a, b)$. This is given by
+\[
+\frac{1}{b-a} \int_{a}^{b} g(x) dx.
+\]
+
+The simple Monte Carlo method generates a large number of replicates $X_{1}, \ldots, X_{m}$ uniformly distributed on $[a, b]$ and estimates the average by the sample mean
+\[
+\frac{1}{m}\sum_{i=1}^{m} g(X_{i}).
+\]
+This converges to $\frac{1}{b-a}\int_{a}^{b} g(x) dx$ with probability 1 by the strong law of large numbers. 
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Introduction}
+
+There are two limitations for this method:
+\begin{enumerate}
+\item It cannot apply to unbounded intervals.
+\item It could be inefficient to draw samples uniformly across the interval if the function $g(x)$ is not very uniform.\\~\
+\end{enumerate}
+
+In this project, we will introduce three different sampling methods: importance sampling, stratified sampling, and stratified importance sampling to reduce variance in Monte Carlo simulations. We will analyze the variance reduction for each method and compare their performance in simulations.
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Importance Sampling}
+
+Suppose $X$ is a random variable with density function $f(x)$ supported on $A$, then
+\[
+\int_A g(x) dx = \int_A \frac{g(x)}{f(x)} f(x) dx = \mathbb{E}_f\left[\frac{g(X)}{f(X)}\right].
+\]
+
+Estimate $\mathbb{E}_f[g(X)/f(X)]$ by simple Monte Carlo integration. That is, compute the average
+\[
+\frac{1}{m} \sum_{i=1}^{m} \frac{g\left(X_{i}\right)}{f\left(X_{i}\right)},
+\]
+where the random variables $X_{1}, \ldots, X_{m}$ are generated from the distribution with density $f(x)$. The density $f(x)$ is called the importance function.
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Importance Sampling}
+
+The distribution of $X$ can be chosen to reduce the variance of the sample mean estimator. The minimum variance is obtained when
+\[
+f(x)=\frac{|g(x)|}{\int_{A}|g(x)| dx}.
+\]
+
+This result shows when choosing the distribution $f(x)$, we want to make sure the value of $\frac{g(x)}{f(x)}$ is close to a constant, or intuitively, we want $f(x)$ to have a similar ``shape'' as $g(x)$.
+In the meanwhile, though, the variable with density $f(\cdot)$ should be reasonably easy to simulate.
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Stratified Sampling}
+
+Another approach to variance reduction is stratified sampling. This method aims to reduce the variance of the estimator by dividing the interval into strata and estimating the integral on each stratum with a smaller variance. Linearity of the integral operator and the strong law of large numbers implies that the sum of these estimates converges to $\int g(x) d x$ with probability 1. In stratified sampling, the number of replicates $m$ and number of replicates $m_{j}$ to be drawn from each of $k$ strata are fixed so that $m=m_{1}+\cdots+m_{k}$, with the goal that
+\[
+\operatorname{Var}\left(\widehat{\theta}_{k}\left(m_{1}, \ldots, m_{k}\right)\right)<\operatorname{Var}\left(\widehat{\theta}\right),
+\]
+where $\widehat{\theta}_{k}\left(m_{1}, \ldots, m_{k}\right)$ is the stratified estimator and $\widehat{\theta}$ is the standard Monte Carlo estimator based on $m=m_{1}+\cdots+m_{k}$ replicates.
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Stratified Sampling}
+
+\begin{proposition}
+Denote the standard Monte Carlo estimator with $M$ replicates by $\widehat{\theta}^{M}$, and let
+\[
+\widehat{\theta}^{S}=\frac{1}{k} \sum_{j=1}^{k} \widehat{\theta}_{j}
+\]
+denote the stratified estimator with equal size $m=M / k$ strata. Denote the mean and variance of $g(U)$ on stratum $j$ by $\theta_{j}$ and $\sigma_{j}^{2}$, respectively. Then $\operatorname{Var}\left(\widehat{\theta}^{M}\right) \geq \operatorname{Var}\left(\widehat{\theta}^{S}\right)$.
+\end{proposition}
+
+There can be more reduction in variance using stratification when the means of the strata are widely dispersed than if the means of the strata are approximately equal. For integrands that are monotone functions, stratification should be an effective way to reduce variance.
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Stratified Importance Sampling}
+
+Stratified importance sampling is a modification to the importance sampling method of estimation $\theta = \int g(x)dx$.\\~\
+
+Choose a suitable importance function $f$. Suppose that $X$ is generated with density $f$ and cdf $F$ using the probability integral transformation. If $M$ replicates are generated, the importance sampling estimate $\theta$ has variance $\sigma^2/M$, where $\sigma^2=\operatorname{Var}\left(g(X)/f(X)\right)$.
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Stratified Importance Sampling}
+
+For the stratified importance sampling estimate, divide the real line into $k$ intervals $I_j=\{x:a_{j-1}\leq x <a_j\}$ with endpoints $a_0=-\infty$, $a_j=F^{-1}(j/k)$, where $j=1,\ldots,k-1$, and $a_k=\infty$. On each subinterval define $g_j(x)=g(x)$ if $x\in I_j$ and $g_j(x)=0$ otherwise. Now, we have $k$ parameter to estimate,
+\[
+\theta_j=\int_{a_{j-1}}^{a_j} g_j(x)dx,\quad j=1,\ldots,k
+\]
+and $\theta=\theta_1+\cdots+\theta_k$. The conditional densities provide the importance functions on each subinterval. That is, on each subinterval $I_j$, the conditional density $f_j$ of $X$ is defined by
+\begin{align*}
+f_j(x)=f_{X|I_j}(x|I_j) &=\frac{f(x,a_{j-1}\leq x<a_j)}{\mathbb{P}(a_{j-1}\leq x<a_j)}\\
+&=\frac{f(x)}{1/k}=kf(x),\quad a_{j-1}\leq x<a_j.
+\end{align*}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Stratified Importance Sampling}
+
+Let $\sigma_j^2=\operatorname{Var}\left(g_j(X)/f_j(X)\right)$. For each $j= 1,\ldots,k$ we simulate an importance sample size $m$, compute the importance sampling estimator $\widehat{\theta}_{j}$ of $\theta_j$ on the $j$th subinterval, and compute $\widehat{\theta}^{SI}=\frac{1}{k}\sum_{j=1}^k\widehat{\theta}_{j}$. Then by independence of $\widehat{\theta}_{1},\ldots,\widehat{\theta}_{k}$,
+\[
+\operatorname{Var}\left(\widehat{\theta}^{SI}\right)=\operatorname{Var}\left(\sum_{j=1}^k\widehat{\theta}_{j}\right)=\sum_{j=1}^k\frac{\sigma_j^2}{m}=\frac{1}{m}\sum_{j=1}^k\sigma_j^2.
+\]
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Stratified Importance Sampling}
+
+Denote the importance sampling estimator by $\widehat{\theta}^{I}$. In order to determine whether $\widehat{\theta}^{SI}$ is better estimator of $\theta$ than $\widehat{\theta}^{I}$, we need to check that $\operatorname{Var}\left(\widehat{\theta}^{SI}\right)$ is smaller than the variance without stratification. The variance is reduced by stratification if 
+\[
+\frac{\sigma^2}{M}>\frac{1}{m}\sum_{j=1}^k\sigma_j^2=\frac{k}{M}\sum_{j=1}^k\sigma_j^2 \implies \sigma^2-k\sum_{j=1}^k\sigma_j^2>0.
+\]
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Stratified Importance Sampling}
+
+\begin{proposition}
+Suppose $M = mk$ is the number of replicates for an importance sampling estimator $\widehat{\theta}^{I}$, and $\widehat{\theta}^{SI}$ is a stratified importance sampling estimator, with estimates $\widehat{\theta}_{j}$ for $\theta_j$ on the individual strata, each with $m$ replicates. If $\operatorname{Var}\left(\widehat{\theta}^{I}\right)=\sigma^2/M$ and $\operatorname{Var}\left(\widehat{\theta}_{j}\right)=\sigma^2/m, j=1,\ldots,k$, then
+\[
+\sigma^2-k\sum_{j=1}^k \sigma_j^2\geq 0
+\]
+with equality if and only if $\theta_1=\dots=\theta_k$. Hence, stratification never increases the variance, and there exists a stratification that reduces the variance except when $g(x)$ is constant.
+\end{proposition}
+\end{frame}
+
+\end{document}

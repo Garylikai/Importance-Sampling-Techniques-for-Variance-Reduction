@@ -1,0 +1,9 @@
+\frametitle{Stratified Importance Sampling}
+
+\begin{proposition}
+Suppose $M = mk$ is the number of replicates for an importance sampling estimator $\widehat{\theta}^{I}$, and $\widehat{\theta}^{SI}$ is a stratified importance sampling estimator, with estimates $\widehat{\theta}_{j}$ for $\theta_j$ on the individual strata, each with $m$ replicates. If $\operatorname{Var}\left(\widehat{\theta}^{I}\right)=\sigma^2/M$ and $\operatorname{Var}\left(\widehat{\theta}_{j}\right)=\sigma^2/m, j=1,\ldots,k$, then
+\[
+\sigma^2-k\sum_{j=1}^k \sigma_j^2\geq 0
+\]
+with equality if and only if $\theta_1=\dots=\theta_k$. Hence, stratification never increases the variance, and there exists a stratification that reduces the variance except when $g(x)$ is constant.
+\end{proposition}

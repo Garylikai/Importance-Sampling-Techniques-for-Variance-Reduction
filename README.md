@@ -7,7 +7,7 @@ A Fall 2022 AMS 553 group project comparing importance sampling, stratified samp
 The project estimates
 
 $$
-\int_0^1 \frac{e^{-x}}{1+x^2}dx
+\int_0^1 \frac{e^{-x}}{1+x^2} dx
 $$
 
 and studies how alternative sampling designs change estimator variance relative to uniform Monte Carlo sampling.

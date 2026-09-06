@@ -1,6 +1,6 @@
 ---
 title: "AMS 553 Project"
-author: "Zhe Zhou"
+author: "Kai Li, Wenbo Du, Zhe Zhou, and Zeyu Dong"
 date: "12/1/2022"
 output: pdf_document
 ---
